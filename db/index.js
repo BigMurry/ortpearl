@@ -14,7 +14,8 @@ async function getModel(dbUrl, dbName = DB_NAME) {
         dbName,
         autoIndex: false,
         poolSize: 10,
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useUnifiedTopology: true
       }
     );
     const schemaNames = Object.keys(schemas);
