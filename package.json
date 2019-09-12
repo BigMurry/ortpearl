@@ -1,0 +1,24 @@
+{
+  "name": "ortpearl",
+  "version": "1.0.0",
+  "description": "ethereum event watch engine, just like Oriental  Pearl TV Tower, high and beautiful",
+  "main": "index.js",
+  "repository": "git@github.com:udap/ortpearl.git",
+  "author": "BigMurry <hhdiao@siom.ac.cn>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "cron": "^1.7.2",
+    "debug": "^4.1.1",
+    "ethers": "^4.0.37",
+    "lodash": "^4.17.15",
+    "md5": "^2.2.1",
+    "mongoose": "^5.7.0",
+    "require-dir": "^1.2.0",
+    "then-sleep": "^1.0.1",
+    "traverse": "^0.6.6"
+  },
+  "devDependencies": {
+    "xhstandard": "^2.0.0"
+  }
+}
