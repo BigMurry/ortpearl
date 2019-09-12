@@ -1,12 +1,15 @@
 {
-  "name": "ortpearl",
+  "name": "@coke_bet/ortpearl",
   "version": "1.0.0",
   "description": "ethereum event watch engine, just like Oriental  Pearl TV Tower, high and beautiful",
   "main": "index.js",
-  "repository": "git@github.com:udap/ortpearl.git",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/udap/ortpearl.git"
+  },
   "author": "BigMurry <hhdiao@siom.ac.cn>",
   "license": "MIT",
-  "private": false,
+  "private": true,
   "scripts": {
     "test": "tap test/**/*.test.js"
   },
@@ -23,5 +26,17 @@
   },
   "devDependencies": {
     "xhstandard": "^2.0.0"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/udap/ortpearl/issues"
+  },
+  "homepage": "https://github.com/udap/ortpearl#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "keywords": [
+    "ethereum",
+    "event"
+  ]
 }
