@@ -9,7 +9,7 @@
   },
   "author": "BigMurry <hhdiao@siom.ac.cn>",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "scripts": {
     "test": "tap test/**/*.test.js"
   },
