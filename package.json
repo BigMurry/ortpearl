@@ -7,6 +7,9 @@
   "author": "BigMurry <hhdiao@siom.ac.cn>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "test": "tap test/**/*.test.js"
+  },
   "dependencies": {
     "cron": "^1.7.2",
     "debug": "^4.1.1",
