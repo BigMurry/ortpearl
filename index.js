@@ -2,6 +2,7 @@ const startCronJobs = require('./cron');
 const {getModel} = require('./db');
 const {newLog} = require('./lib/utils');
 const createTasks = require('./lib/task');
+const abiHelper = require('./lib/abi');
 const logger = newLog('interface');
 
 async function create(conf) {
@@ -47,5 +48,6 @@ async function create(conf) {
 }
 
 module.exports = {
-  startEngine: create
+  startEngine: create,
+  abiHelper
 };
