@@ -65,7 +65,7 @@ async function handler() {
     }
     totalEvents += events.length;
   }
-  logger.debug(`confirm ${totalEvents} events.`);
+  logger.debug(`confirming ${totalEvents} events.`);
 }
 
 module.exports = handler;

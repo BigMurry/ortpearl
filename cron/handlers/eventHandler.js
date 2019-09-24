@@ -63,7 +63,7 @@ async function handler() {
     await EngineConf.saveLastStop(address, fromBlock, blockNow);
     totalEvents += logs.length;
   }
-  logger.debug(`fetch ${totalEvents} events: contract[${address}], chainId[${chainId}]`);
+  logger.debug(`fetched ${totalEvents} events: ${address}@${chainId}`);
 }
 
 module.exports = handler;
