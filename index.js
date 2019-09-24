@@ -1,12 +1,14 @@
 const startCronJobs = require('./cron');
 const {getModel} = require('./db');
-const {newLog} = require('./lib/utils');
 const createTasks = require('./lib/task');
 const abiHelper = require('./lib/abi');
-const logger = newLog('interface');
+const {newLog} = require('./lib/utils');
+
+const defaultLoggerFactory = newLog('ortpearl');
 
 async function create(conf) {
   const {
+    loggerFactory = defaultLoggerFactory,
     tasks,
     abis,
     taskCtx,
@@ -17,6 +19,7 @@ async function create(conf) {
     engineDbName
   } = conf;
 
+  const logger = loggerFactory('engine');
   // create tasks
   const {mergeTasks, rawTasks} = await createTasks(
     tasks,
@@ -36,6 +39,7 @@ async function create(conf) {
 
   const stopCronJobs = await startCronJobs({
     maxConfirmCount,
+    logger,
     mergeTasks,
     channels,
     dbModels,

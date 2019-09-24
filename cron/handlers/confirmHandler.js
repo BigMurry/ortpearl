@@ -1,7 +1,4 @@
 const _ = require('lodash');
-const {newLog} = require('../../lib/utils');
-
-const logger = newLog('handlers:confirm');
 
 const EVENT_SLICE_SIZE = 25;
 
@@ -33,15 +30,16 @@ function mergeEvents(events) {
 
 async function handler() {
   const {
+    logger,
     dbModels,
     providers,
     maxConfirmCount
   } = this;
-  logger.debug('[cron] update events confirmations...');
   const {Event} = dbModels;
 
   let remain = true;
   let fromEventSeq = 1;
+  let totalEvents = 0;
   const size = EVENT_SLICE_SIZE;
 
   while (remain) {
@@ -65,7 +63,9 @@ async function handler() {
     if (events.length < size) {
       remain = false;
     }
+    totalEvents += events.length;
   }
+  logger.debug(`confirm ${totalEvents} events.`);
 }
 
 module.exports = handler;

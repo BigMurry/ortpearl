@@ -1,16 +1,14 @@
 const _ = require('lodash');
 const sleep = require('then-sleep');
-const {newLog} = require('../../lib/utils');
 const DEFAULT_RETRY = 5;
 const DEFAULT_DELAY = 1000; // ms
 const DEFAULT_EVENT_SIZE = 100;
-
-const logger = newLog('handlers:channel');
 
 function retry(fn, times, delay) {
   return async (...args) => {
     let tried = 0;
     let ok = false;
+    let err;
     while (tried <= times) {
       try {
         ok = await fn(...args);
@@ -19,16 +17,12 @@ function retry(fn, times, delay) {
         }
       } catch (e) {
         ok = false;
-        console.log(e.stack);
+        err = e;
       }
-      logger.info(`handler failed, retry in ${delay}ms...`);
       ++tried;
       await sleep(delay);
     }
-    if (!ok) {
-      logger.info(`retry out and handler execute failed.`);
-    }
-    return ok;
+    return {ok, err};
   };
 }
 
@@ -37,6 +31,7 @@ async function handler() {
   const {
     dbModels,
     channelId,
+    logger,
     task: {
       handle,
       address,
@@ -48,12 +43,12 @@ async function handler() {
       size = DEFAULT_EVENT_SIZE
     }
   } = this;
-  logger.debug(`[cron] ${address}:${eventName}`);
   const {Channel, Event} = dbModels;
   const channel = await Channel.getChannel(channelId);
   let fromSeq = channel.eventSeq || 0;
   const retryHandler = retry(handle, retryTimes, retryDelay);
   let remain = true;
+  let totalEvents = 0;
 
   while (remain) {
     // get new events
@@ -64,8 +59,10 @@ async function handler() {
     }
 
     // handle events
-    const ok = await retryHandler(events);
+    const {ok, err} = await retryHandler(events);
     if (!ok) {
+      logger.error(`handler retry out.`);
+      logger.error(err);
       break;
     }
     const lastEvt = _.last(events);
@@ -73,7 +70,9 @@ async function handler() {
     fromSeq = lastEvt.seq;
 
     remain = events.length === size;
+    totalEvents += events.length;
   }
+  logger.debug(`push ${totalEvents} ${eventName} events.`);
 }
 
 module.exports = handler;

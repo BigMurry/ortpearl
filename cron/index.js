@@ -5,9 +5,6 @@ const eventHandler = require('./handlers/eventHandler');
 const channelHandler = require('./handlers/channelHandler');
 const confirmHandler = require('./handlers/confirmHandler');
 const {CRON} = require('./share/conf');
-const {newLog} = require('../lib/utils');
-
-const logger = newLog('task:cron');
 
 const eventIntervals = {
   1: CRON.FETCH_EVENTS_MAINNET,
@@ -20,6 +17,7 @@ async function setup({
   nodes,
   dbModels,
   channels,
+  logger,
   mergeTasks,
   maxConfirmCount
 }) {
@@ -33,6 +31,7 @@ async function setup({
     const provider = providers[task.chainId];
     const contract = new ethers.Contract(task.address, task.abi, provider);
     const ctx = {
+      logger,
       dbModels,
       maxConfirmCount,
       contract,
@@ -50,6 +49,7 @@ async function setup({
   // start channel jobs
   const channJobs = channels.map(({channelId, task}) => {
     const ctx = {
+      logger,
       dbModels,
       channelId,
       task
@@ -67,7 +67,7 @@ async function setup({
     handler: confirmHandler,
     autoStart: true,
     interval: CRON.EVENT_CONFIRM
-  })({dbModels, providers, maxConfirmCount});
+  })({logger, dbModels, providers, maxConfirmCount});
   logger.debug('create confirm jobs done.');
 
   return () => {

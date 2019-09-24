@@ -1,12 +1,11 @@
 const {getLogs} = require('../share/core');
-const {newLog} = require('../../lib/utils');
 
-const logger = newLog('handers:event');
 const MAX_BLOCK = 100;
 const DEFAULT_CONFIRM_BLOCKS = 5;
 
 async function handler() {
   const {
+    logger,
     maxConfirmCount,
     dbModels,
     provider,
@@ -19,7 +18,6 @@ async function handler() {
       topics
     }
   } = this;
-  logger.debug(`[cron] contract[${address}] of chainId[${chainId}]`);
   const {EngineConf, Event} = dbModels;
 
   // get last stop point
@@ -31,6 +29,7 @@ async function handler() {
   const maxBlock = blockNow - DEFAULT_CONFIRM_BLOCKS;
 
   let fromBlock = lastStop || initialBlock;
+  let totalEvents = 0;
   while (fromBlock <= maxBlock) {
     let toBlock = Math.min(fromBlock + MAX_BLOCK - 1, maxBlock);
 
@@ -62,7 +61,9 @@ async function handler() {
 
     // save last stop
     await EngineConf.saveLastStop(address, fromBlock, blockNow);
+    totalEvents += logs.length;
   }
+  logger.debug(`fetch ${totalEvents} events: contract[${address}], chainId[${chainId}]`);
 }
 
 module.exports = handler;
