@@ -1,6 +1,6 @@
 {
   "name": "@coke_bet/ortpearl",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "ethereum event watch engine, just like Oriental  Pearl TV Tower, high and beautiful",
   "main": "index.js",
   "repository": {
