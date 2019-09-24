@@ -1,8 +1,6 @@
 const CronJob = require('cron').CronJob;
-const {newLog} = require('../../lib/utils');
-const logger = newLog('task:factory');
 
-function taskFactory(taskName, {handler, interval, autoStart}) {
+function taskFactory(taskName, {handler, interval, autoStart, logger}) {
   let task;
 
   function getHandler(handler) {

@@ -41,7 +41,8 @@ async function setup({
     return taskFactory(`evt#${task.address}`, {
       handler: eventHandler,
       autoStart: true,
-      interval: eventIntervals[task.chainId]
+      interval: eventIntervals[task.chainId],
+      logger: ctx.logger
     })(ctx);
   });
   logger.debug(`create ${mergeTasks.length} event jobs done.`);
@@ -57,7 +58,8 @@ async function setup({
     return taskFactory(`channel#${channelId}`, {
       handler: channelHandler,
       autoStart: true,
-      interval: CRON.CHANNEL_HANDLER
+      interval: CRON.CHANNEL_HANDLER,
+      logger: ctx.logger
     })(ctx);
   });
   logger.debug(`create ${channels.length} channels jobs done.`);
@@ -66,7 +68,8 @@ async function setup({
   const confirmJob = taskFactory(`confirmjob`, {
     handler: confirmHandler,
     autoStart: true,
-    interval: CRON.EVENT_CONFIRM
+    interval: CRON.EVENT_CONFIRM,
+    logger
   })({logger, dbModels, providers, maxConfirmCount});
   logger.debug('create confirm jobs done.');
 
